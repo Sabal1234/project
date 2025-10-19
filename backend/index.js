@@ -7,11 +7,7 @@ dotenv.config();
 const app = express();
 const PORT = 5000;
 dbConnection()
-
 app.use(express.json());
-
-
-
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
