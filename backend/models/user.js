@@ -9,9 +9,9 @@ class User {
    
     static async create(username,password) {
         const database = await dbConnection();
-        const hashedPassword = hashPassword(password);
+        const hashedPassword = await hashPassword(password);
         const sql = await database.query(
-            'INSERT INTO users(user_name, password_hash) VALUES (?,?)',
+            'INSERT INTO users(user_name, password_hash) VALUES ($1, $2) RETURNING id, user_name',
             [username, hashedPassword]
 
         );
@@ -21,7 +21,7 @@ return sql.rows[0]
     static async findAll() {
         const database = await dbConnection();
         const sql = await database.query('SELECT id, user_name FROM users ORDER BY id');
-        return XPathResult.rows;
+        return sql.rows;
     }
       static async findByUsername(username) {
     const database = await dbConnection();
