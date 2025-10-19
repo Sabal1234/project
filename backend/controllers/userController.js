@@ -1,7 +1,11 @@
-import User from '../models/user.js';
+import User from '../models/User.js';
 export const registerUser = async (req, res) => {
-    try {
-        const { username, password } = req.body;
+  try {
+
+      const { username, password } = req.body;
+if (!username || !password) {
+  return res.status(400).json({ message: "Username and password are required" });
+}
         const newUser = await User.create(username,password);
         res.status(201).json({
             message: 'new user created',

@@ -7,8 +7,11 @@ const hashPassword = async (password) => {
 };
 class User {
    
-    static async create(username,password) {
-        const database = await dbConnection();
+  static async create(username, password) {
+          console.log('User.create called with:', { username, password }); // ADD THIS
+    const database = await dbConnection();
+        console.log('Before hashPassword, password is:', password); // ADD THIS
+
         const hashedPassword = await hashPassword(password);
         const sql = await database.query(
             'INSERT INTO users(user_name, password_hash) VALUES ($1, $2) RETURNING id, user_name',
