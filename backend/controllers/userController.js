@@ -1,4 +1,4 @@
-import User from '../models/User.js';
+import User from '../models/user.js';
 export const registerUser = async (req, res) => {
   try {
 
@@ -24,14 +24,17 @@ export const loginUser = async (req, res) => {
             return res.status(401).json({ status: false, message: "Invalid email or password." });
         }
         const isMatch = await User.checkPassword(password,user.password_hash);
-if (user && isMatch) {
-    res.status(200).json({
+    if (isMatch) {
+      const token = jwt.sign(
+        { userId: user.id, username: user.user_name },
+        process.env.JWT_SECRET,
+        { expiresIn: '24h' }
+      );
+          res.json({
         message: 'Login successful',
-        user: {
-            id: user.id,
-            username: user.user_name
-        }
-    });
+        token: token,  
+        user: { id: user.id, username: user.user_name }
+      });
         } else {
             return res
                 .status(401)
